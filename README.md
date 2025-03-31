@@ -1,8 +1,4 @@
-# migrar-gitlab
-Migração de Pipes do Gitlab Comunity para o Enterprise
-
-
-# migrar-gitlab
+# Migrar-Gitlab
 
 Automação da migração de repositórios GitLab de uma instância **Community Edition (self-hosted)** para uma instância **GitLab Enterprise (gitlab.com)**.
 
