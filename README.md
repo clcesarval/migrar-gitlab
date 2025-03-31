@@ -60,7 +60,7 @@ chmod +x clone-projects.sh
 ### ✏️ O que este script faz?
 
 - Localiza todos os arquivos `.gitlab-ci.yml` em `tmp-migracao/`
-- Substitui caminhos antigos por novos (exemplo: `pmid/libs` → `engbr/.../legacy/libs`)
+- Substitui caminhos antigos por novos (exemplo: `grupo/subgrupo` → `grupo-raiz/.../grupo/subgrupo`)
 - Cria backups `.bak` dos arquivos antes de editar
 
 ### ⚙️ Personalização
@@ -136,7 +136,7 @@ chmod +x push_projects.sh
 - Teste com 1 ou 2 projetos antes de rodar com todos
 - Use tokens com escopos completos (inclusive `write_repository`)
 - Faça backup (snapshot) antes de alterações em massa
-- Estruturar projetos por subgrupos (`libs`, `core`, `fast`, etc.) ajuda na organização
+- Estruturar projetos por subgrupos (`grupo1`, `grupo2`, `grupo3`, etc.) ajuda na organização
 
 ---
 
