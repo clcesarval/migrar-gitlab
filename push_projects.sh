@@ -3,7 +3,7 @@
 # ============================
 # VARIÁVEL DO GRUPO
 # ============================
-GRUPO="nome-do-subgrupo"  # Altere para subgrupo1, subgrupo2, subgrupo3, etc
+GRUPO="nome-do-subgrupo"  # Altere para grupo1, grupo2, grupo3, ..etc
 
 # Caminho base onde estão os repositórios clonados
 cd tmp-migracao || exit 1
