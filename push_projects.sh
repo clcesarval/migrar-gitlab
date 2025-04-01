@@ -3,30 +3,42 @@
 # ============================
 # VARIÁVEL DO GRUPO
 # ============================
-GRUPO="nome-do-subgrupo"  # Altere para grupo1, grupo2, grupo3, ..etc
+GRUPO="grupo"  # Altere para grupo1, grupo2, etc...
 
 # Caminho base onde estão os repositórios clonados
 cd tmp-migracao || exit 1
 
 # GitLab de destino
-TARGET_GITLAB_HOST="gitlab.com"
+TARGET_GITLAB_HOST="gitlab.seu-destino.com"
 TARGET_GITLAB_TOKEN="SEU_TOKEN_GITLAB_DESTINO"
-TARGET_GROUP_PATH="seu-grupo/gitlab-destino/$GRUPO"
+TARGET_GROUP_PATH="caminho/do/grupo/destino/$GRUPO"
 
 # GitLab de origem
-SOURCE_GITLAB_HOST="gitlab.seudominio.com"
+SOURCE_GITLAB_HOST="gitlab.seu-origem.com"
 SOURCE_GITLAB_TOKEN="SEU_TOKEN_GITLAB_ORIGEM"
-SOURCE_GROUP_PATH="seu-grupo/gitlab-origem/$GRUPO"
+SOURCE_GROUP_PATH="caminho/do/grupo/origem/$GRUPO"
 
 for dir in */; do
   echo -e "\n📦 Entrando no projeto: $dir"
   cd "$dir" || continue
 
   PROJECT_NAME=$(basename "$PWD")
+  SOURCE_REPO_URL="https://oauth2:$SOURCE_GITLAB_TOKEN@$SOURCE_GITLAB_HOST/$SOURCE_GROUP_PATH/$PROJECT_NAME.git"
   DEST_REPO_URL="https://oauth2:$TARGET_GITLAB_TOKEN@$TARGET_GITLAB_HOST/$TARGET_GROUP_PATH/$PROJECT_NAME.git"
 
-  echo "🔍 Verificando remote atual:"
-  git remote -v
+  echo "🔁 Garantindo que o remote 'origin' aponte para a origem..."
+  git remote remove origin || true
+  git remote add origin "$SOURCE_REPO_URL"
+
+  echo "🌐 Buscando todas as branches da origem ($SOURCE_REPO_URL)..."
+  git fetch origin
+
+  echo "📚 Criando localmente todas as branches da origem..."
+  for branch in $(git branch -r | grep 'origin/' | grep -v '\->'); do
+    local_branch=$(echo "$branch" | sed 's|origin/||')
+    echo "🔄 Criando branch local: $local_branch"
+    git checkout -B "$local_branch" "origin/$local_branch"
+  done
 
   echo "🔁 Reconfigurando 'origin' para o repositório de destino:"
   git remote remove origin || true
