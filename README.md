@@ -12,7 +12,7 @@ Este repositório contém **scripts bash reutilizáveis** para facilitar a clona
 |------------------------|---------------------------------------------------------------------------|
 | `clone-projects.sh`    | 🔄 Clona todos os projetos de um grupo GitLab origem                      |
 | `replace_gitlab-ci.sh` | ✏️ Atualiza caminhos internos do `.gitlab-ci.yml` para o novo repositório |
-| `push_projects.sh`     | ⬆️ Faz o push dos repositórios migrados para o GitLab de destino          |
+| `push_projects.sh`     | ⬆️ Reconfigura remotes, recria branches da origem e faz push final        |
 
 ---
 
@@ -60,7 +60,7 @@ chmod +x clone-projects.sh
 ### ✏️ O que este script faz?
 
 - Localiza todos os arquivos `.gitlab-ci.yml` em `tmp-migracao/`
-- Substitui caminhos antigos por novos (exemplo: `grupo/subgrupo` → `grupo-raiz/.../grupo/subgrupo`)
+- Substitui caminhos antigos por novos (exemplo: `old-group/subgroup` → `new-root-group/.../legacy/subgroup`)
 - Cria backups `.bak` dos arquivos antes de editar
 
 ### ⚙️ Personalização
@@ -81,21 +81,24 @@ chmod +x replace_gitlab-ci.sh
 
 ---
 
-## 🔹 3. `push_projects.sh`
+## 🔹 3. `push_projects.sh` (versão atualizada)
 
 ### ⬆️ O que este script faz?
 
-- Entra em cada projeto clonado
-- Reconfigura o `origin` para o GitLab destino
-- Comita alterações locais se necessário
-- Faz push de **todas as branches** e **tags**
-- Verifica se o projeto está arquivado na origem e arquiva no destino, se necessário
+- Acessa cada projeto clonado
+- Redefine o remote `origin` para apontar para o repositório **de origem**
+- Busca todas as branches da origem
+- Cria localmente cada branch remota da origem
+- Redefine o `origin` para o repositório de **destino**
+- Realiza push de **todas as branches** e **tags**
+- Verifica se o projeto está arquivado na origem e replica o arquivamento no destino
 
 ### ⚙️ Personalização
 
-Edite:
-- Tokens e hosts
-- Caminho do grupo (`SOURCE_GROUP_PATH`, `TARGET_GROUP_PATH`)
+Edite no script:
+- `GRUPO`
+- Hosts e tokens de origem/destino
+- Caminhos dos grupos
 
 ### ▶️ Como executar:
 
@@ -136,7 +139,7 @@ chmod +x push_projects.sh
 - Teste com 1 ou 2 projetos antes de rodar com todos
 - Use tokens com escopos completos (inclusive `write_repository`)
 - Faça backup (snapshot) antes de alterações em massa
-- Estruturar projetos por subgrupos (`grupo1`, `grupo2`, `grupo3`, etc.) ajuda na organização
+- Estruturar projetos por subgrupos (`subgrupo1`, `subgrupo2`, `subgrupo3`, etc.) ajuda na organização
 
 ---
 
