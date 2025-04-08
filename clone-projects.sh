@@ -7,18 +7,18 @@ set -euo pipefail
 # CONFIGURAÇÃO PERSONALIZÁVEL
 # ============================
 
-# Nome do subgrupo a ser migrado
-GRUPO="meu-subgrupo"
+# Nome do grupo a ser migrado
+GRUPO="SEU_GRUPO"
 
 # GitLab de origem
-SOURCE_GITLAB_HOST="gitlab.seu-dominio.com"
-SOURCE_GITLAB_TOKEN="SEU_TOKEN_GITLAB_ORIGEM"
-SOURCE_GROUP_PATH="grupo%2F$GRUPO"  # URL-encoded
+SOURCE_GITLAB_HOST="gitlab.seudominio.com.br"
+SOURCE_GITLAB_TOKEN="SEU_TOKEN_DE_ORIGEM"
+SOURCE_GROUP_PATH="grupo%2F$GRUPO"  # Caminho URL-encoded
 
 # GitLab de destino
 TARGET_GITLAB_HOST="gitlab.com"
-TARGET_GITLAB_TOKEN="SEU_TOKEN_GITLAB_DESTINO"
-TARGET_GROUP_PATH="seu-grupo/seu-subgrupo/legacy/$GRUPO"
+TARGET_GITLAB_TOKEN="SEU_TOKEN_DE_DESTINO"
+TARGET_GROUP_PATH="destino/estrutura/$GRUPO"
 
 # ============================
 # CLONAGEM DOS PROJETOS
@@ -51,10 +51,15 @@ for SOURCE_PROJECT in "${PROJECTS[@]}"; do
   DEST_PROJECT_NAME=$(basename "$SOURCE_PROJECT")
   DEST_FULL_PATH="$TARGET_GROUP_PATH/$DEST_PROJECT_NAME"
 
-  echo -e "\\n🔄 Clonando projeto: $SOURCE_PROJECT → $DEST_FULL_PATH"
+  # Pula se o projeto já foi clonado
+  if [[ -d "$DEST_PROJECT_NAME/.git" ]]; then
+    echo "⏩ [$DEST_PROJECT_NAME] já existe localmente. Pulando clonagem..."
+    continue
+  fi
 
-  rm -rf "$DEST_PROJECT_NAME"
-  if git clone --no-single-branch "https://oauth2:$SOURCE_GITLAB_TOKEN@$SOURCE_GITLAB_HOST/$SOURCE_PROJECT.git" "$DEST_PROJECT_NAME"; then
+  echo -e "\n🔄 Clonando projeto: $SOURCE_PROJECT → $DEST_FULL_PATH"
+
+  if git clone --origin origin "https://oauth2:$SOURCE_GITLAB_TOKEN@$SOURCE_GITLAB_HOST/$SOURCE_PROJECT.git" "$DEST_PROJECT_NAME"; then
     cd "$DEST_PROJECT_NAME" || continue
 
     git fetch --all --tags
@@ -69,13 +74,13 @@ for SOURCE_PROJECT in "${PROJECTS[@]}"; do
   fi
 done
 
-echo -e "\\n🏁 Clonagem concluída. Repositórios prontos para edição local e push posterior."
+echo -e "\n🏁 Clonagem concluída. Repositórios prontos para edição local e push posterior."
 
 # ============================
-# BUSCA DE REFERÊNCIAS NO .gitlab-ci.yml
+# VERIFICAÇÃO DE REFERÊNCIAS NO .gitlab-ci.yml
 # ============================
 
-echo -e "\\n📂 Verificando arquivos .gitlab-ci.yml com referências antigas de projeto:\\n"
+echo -e "\n📂 Verificando arquivos .gitlab-ci.yml com referências antigas de projeto:\n"
 MATCHES=$(find . -type f -name ".gitlab-ci.yml" -exec grep -H '^[[:space:]]*-[[:space:]]project:' {} \; || true)
 
 if [[ -n "$MATCHES" ]]; then
@@ -88,6 +93,6 @@ fi
 # SUGESTÃO DE CAMINHOS PARA SUBSTITUIÇÃO
 # ============================
 
-echo -e "\\n📌 Use os caminhos abaixo no seu script de substituição:"
+echo -e "\n📌 Use os caminhos abaixo no seu script de substituição:"
 echo "OLD_PATH=\"grupo/$GRUPO\""
-echo "NEW_PATH=\"seu-grupo/seu-subgrupo/legacy/$GRUPO\""
+echo "NEW_PATH=\"destino/estrutura/$GRUPO\""
