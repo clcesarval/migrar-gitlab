@@ -36,8 +36,14 @@ Este repositório contém **scripts bash reutilizáveis** para facilitar a clona
 - Acessa a API do GitLab origem
 - Lista todos os projetos do grupo informado
 - Clona os repositórios na pasta `tmp-migracao/`
+- **Evita sobrescrever projetos já clonados**
 - Remove o remote original
 - Adiciona o remote do GitLab destino
+
+### 🛡️ Segurança adicional
+
+- Valida se a pasta já contém repositório `.git`
+- Pula clonagem caso já tenha sido feito anteriormente
 
 ### ⚙️ Personalização
 
@@ -63,6 +69,11 @@ chmod +x clone-projects.sh
 - Substitui caminhos antigos por novos (exemplo: `pmid/libs` → `engbr/.../legacy/libs`)
 - Cria backups `.bak` dos arquivos antes de editar
 
+### 🛡️ Segurança adicional
+
+- Backup automático dos arquivos `.gitlab-ci.yml`
+- Exibe um resumo após as substituições
+
 ### ⚙️ Personalização
 
 Edite no script:
@@ -81,17 +92,23 @@ chmod +x replace_gitlab-ci.sh
 
 ---
 
-## 🔹 3. `push_projects.sh` (versão atualizada)
+## 🔹 3. `push_projects.sh`
 
 ### ⬆️ O que este script faz?
 
 - Acessa cada projeto clonado
-- Redefine o remote `origin` para apontar para o repositório **de origem**
+- Redefine o remote `origin` para o repositório **de origem**
 - Busca todas as branches da origem
 - Cria localmente cada branch remota da origem
 - Redefine o `origin` para o repositório de **destino**
 - Realiza push de **todas as branches** e **tags**
+- **Verifica se há alterações locais antes de commitar**
+- **Protege arquivos modificados localmente, como o `.gitlab-ci.yml`**
 - Verifica se o projeto está arquivado na origem e replica o arquivamento no destino
+
+### ⚠️ Prevenção de sobrescrita
+
+> Arquivos alterados localmente (ex: `.gitlab-ci.yml`) **não serão sobrescritos** se já houver commit e nada mudou após o `git fetch`.
 
 ### ⚙️ Personalização
 
@@ -131,6 +148,7 @@ chmod +x push_projects.sh
 - ✅ `.gitlab-ci.yml` atualizado com caminhos corretos
 - ✅ Push completo de branches e tags para o GitLab Enterprise
 - ✅ Arquivamento replicado no destino, se aplicável
+- ✅ Proteção contra sobrescrita de arquivos modificados localmente
 
 ---
 
@@ -140,6 +158,7 @@ chmod +x push_projects.sh
 - Use tokens com escopos completos (inclusive `write_repository`)
 - Faça backup (snapshot) antes de alterações em massa
 - Estruturar projetos por subgrupos (`libs`, `core`, `fast`, etc.) ajuda na organização
+- Prefira sempre clonar com `git clone` e evitar `--mirror` para manter controle total
 
 ---
 
