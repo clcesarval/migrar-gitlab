@@ -162,6 +162,83 @@ chmod +x push_projects.sh
 
 ---
 
+
+
+---
+
+## 🔹 4. `migrar-variaveis.sh`
+
+### 📋 O que este script faz?
+
+- Acessa a API do GitLab **self-hosted** (Community)
+- Lista todas as variáveis de ambiente do grupo de origem (com paginação)
+- Cria essas variáveis no grupo correspondente no GitLab **Enterprise** (gitlab.com)
+- Trata variáveis já existentes no destino e registra logs detalhados
+
+### 🛡️ Segurança e rastreabilidade
+
+- Cria logs separados:
+  - `variaveis_existentes.log`: variáveis já presentes no destino
+  - `variaveis_falha.log`: variáveis que falharam ao ser migradas (ex: erro 400)
+  - `migracao_variaveis.log`: resumo final
+  - `variables.json`: dump completo das variáveis lidas da origem
+- Exibe na tela o progresso da migração com ícones visuais
+
+### ⚙️ Personalização
+
+No início do script, edite os seguintes valores:
+
+```bash
+TOKEN_ORIGEM="SEU_TOKEN_ORIGEM"
+TOKEN_DESTINO="SEU_TOKEN_DESTINO"
+GROUP_ID_ORIGEM="ID_DO_GRUPO_ORIGEM"
+GROUP_ID_DESTINO="ID_DO_GRUPO_DESTINO"
+URL_ORIGEM_BASE="https://seu.gitlab.origem/api/v4/groups/$GROUP_ID_ORIGEM/variables"
+URL_DESTINO="https://gitlab.com/api/v4/groups/$GROUP_ID_DESTINO/variables"
+```
+
+> Os tokens devem ter escopos com permissões de leitura e escrita em variáveis de grupo.
+
+### ▶️ Como executar:
+
+```bash
+chmod +x migrar-variaveis.sh
+./migrar-variaveis.sh
+```
+
+---
+
+## 📁 Estrutura esperada após a execução
+
+```
+.
+├── clone-projects.sh
+├── push_projects.sh
+├── replace_gitlab-ci.sh
+├── migrar-variaveis.sh
+├── tmp-migracao/
+│   ├── projeto-1/
+│   ├── projeto-2/
+│   └── ...
+├── variaveis_existentes.log
+├── variaveis_falha.log
+├── migracao_variaveis.log
+├── variables.json
+└── README.md
+```
+
+---
+
+## ✅ Resultado final esperado
+
+- ✅ Variáveis de grupo migradas da origem para o destino via API
+- ✅ Variáveis já existentes identificadas e não sobrescritas
+- ✅ Logs criados para auditoria e troubleshooting
+- ✅ Formato 100% compatível com a API v4 do GitLab
+
+---
+
+
 ## 👨‍💻 Autor
 
 [![GitHub - clcesarval](https://img.shields.io/badge/GitHub-clcesarval-blue?logo=github)](https://github.com/clcesarval)
