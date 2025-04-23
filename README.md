@@ -239,7 +239,7 @@ chmod +x migrar-variaveis.sh
 ---
 
 
-## 👨‍💻 Autor
+## 👨‍💻 Autor Claudio
 
 [![GitHub - clcesarval](https://img.shields.io/badge/GitHub-clcesarval-blue?logo=github)](https://github.com/clcesarval)
 
