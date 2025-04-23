@@ -157,7 +157,7 @@ chmod +x push_projects.sh
 - Teste com 1 ou 2 projetos antes de rodar com todos
 - Use tokens com escopos completos (inclusive `write_repository`)
 - Faça backup (snapshot) antes de alterações em massa
-- Estruturar projetos por subgrupos (`libs`, `core`, `fast`, etc.) ajuda na organização
+- Estruturar projetos por subgrupos (`subgrupo1`, `subgrupo2`, `subgrupo3`, etc.) ajuda na organização
 - Prefira sempre clonar com `git clone` e evitar `--mirror` para manter controle total
 
 ---
@@ -239,7 +239,7 @@ chmod +x migrar-variaveis.sh
 ---
 
 
-## 👨‍💻 Autor
+## 👨‍💻 Autor Claudio
 
 [![GitHub - clcesarval](https://img.shields.io/badge/GitHub-clcesarval-blue?logo=github)](https://github.com/clcesarval)
 
