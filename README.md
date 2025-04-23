@@ -239,6 +239,74 @@ chmod +x migrar-variaveis.sh
 ---
 
 
+## 🔹 5. `migrate-issues.sh` and  `delete-issues.sh`
+
+
+## 🧩 Scripts de Migração e Limpeza de Issues no GitLab
+
+Este repositório contém dois scripts Bash úteis para manipulação de issues entre projetos GitLab. Eles são especialmente úteis em cenários de **migração entre instâncias do GitLab** (ex: de um GitLab self-hosted para o GitLab.com) ou para **limpeza total** de issues existentes.
+
+---
+
+### 📦 `migrar_issues.sh` – Migração de Issues e Comentários
+
+Este script migra todas as issues (e seus comentários) de um projeto GitLab de origem para um projeto GitLab de destino.
+
+#### ✅ Funcionalidades:
+- Exporta issues com título, descrição e data de criação
+- Recria as issues no projeto de destino
+- Preserva o estado original (aberta/fechada)
+- Migra comentários (notas) com nome do autor e data
+
+#### 🛠️ Variáveis que você deve configurar:
+```bash
+DEST_PROJECT_ID="ID_DO_PROJETO_DESTINO"
+TOKEN="SEU_TOKEN_PRIVADO_DESTINO"
+SOURCE_PROJECT_ENCODED="grupo%2Fprojeto"  # Caminho do projeto de origem com %2F no lugar de /
+SOURCE_TOKEN="SEU_TOKEN_PRIVADO_ORIGEM"
+```
+
+---
+
+### ❌ `deletar_issues.sh` – Deleção em Massa de Issues
+
+Script simples que deleta **todas as issues de um projeto GitLab**. Ideal para limpar projetos de teste, ambiente de staging ou recomeçar uma importação.
+
+#### ⚠️ Aviso:
+
+**Use com cuidado!** Este script não tem confirmação e deletará todas as issues no projeto indicado.
+
+#### 🛠️ Variáveis que você deve configurar:
+```bash
+DEST_PROJECT_ID="ID_DO_PROJETO"
+TOKEN="SEU_TOKEN_PRIVADO"
+```
+
+---
+
+### 🧪 Requisitos
+
+- `jq` instalado (`sudo apt install jq` ou equivalente)
+- Bash 4+
+- Tokens do GitLab com permissões de leitura e escrita em issues
+- Projeto de destino previamente criado
+
+---
+
+### 📌 Observações
+
+- Os scripts usam apenas a API REST do GitLab.
+- É recomendado testar em um projeto temporário antes de aplicar em produção.
+- As URLs dos servidores GitLab foram substituídas por placeholders (`gitlab.DESTINO.com`, `gitlab.ORIGEM.com`) para segurança. Atualize conforme necessário.
+
+---
+
+### 📄 Licença
+
+Este projeto está licenciado sob a [MIT License](LICENSE).
+
+
+
 ## 👨‍💻 Autor Claudio
 
 [![GitHub - clcesarval](https://img.shields.io/badge/GitHub-clcesarval-blue?logo=github)](https://github.com/clcesarval)
