@@ -301,6 +301,61 @@ TOKEN="SEU_TOKEN_PRIVADO"
 
 ---
 
+
+## 6. `gitlab-clone-recursive.sh` – Clonagem Recursiva de Repositórios GitLab
+
+Este script clona todos os repositórios de um grupo GitLab (e seus subgrupos), preservando a hierarquia de diretórios localmente. É ideal para backup completo ou migração de um grupo GitLab para outra instância.
+
+### ✅ Funcionalidades:
+- Clona todos os projetos do grupo raiz e de subgrupos recursivamente.
+- Preserva a estrutura original de grupos/subgrupos na pasta local.
+- Usa autenticação via token.
+- Ignora repositórios que já foram clonados previamente.
+
+### 🔧 Variáveis que você deve configurar:
+```bash
+GITLAB_URL="https://gitlab.sua-instancia.com"
+GITLAB_TOKEN="SEU_TOKEN_PRIVADO"
+ROOT_GROUP_ID=000                    # ID do grupo raiz
+ROOT_GROUP_PATH="grupo/raiz"        # Caminho do grupo raiz
+```
+
+### ▶️ Como executar:
+```bash
+bash gitlab-clone-recursive.sh
+```
+
+---
+
+## 7. `gitlab-push-recursive.sh` – Push Recursivo com Criação Automática de Subgrupos
+
+Este script percorre todos os repositórios clonados e os envia (`push`) para outro servidor GitLab, criando automaticamente os subgrupos e projetos se ainda não existirem no destino.
+
+### ✅ Funcionalidades:
+- Cria subgrupos ausentes automaticamente via API do GitLab.
+- Cria o projeto correspondente no destino.
+- Executa push de todas as branches e tags.
+- Preserva a hierarquia original dos repositórios.
+
+### 🔧 Variáveis que você deve configurar:
+```bash
+TARGET_GITLAB_HOST="gitlab.com"
+TARGET_GITLAB_TOKEN="SEU_TOKEN_PRIVADO"
+TARGET_GROUP_PATH="grupo/raiz/para/onde/vai"
+```
+
+### ▶️ Como executar:
+```bash
+bash gitlab-push-recursive.sh
+```
+
+---
+
+💡 **Dica:** Você pode usar `gitlab-clone-recursive.sh` para obter todos os repositórios de um GitLab self-hosted e, em seguida, `gitlab-push-recursive.sh` para enviá-los para o GitLab.com ou outro destino.
+
+🛠 Ambos os scripts foram criados para facilitar a migração de grandes grupos entre diferentes instâncias do GitLab, com mínima intervenção manual.
+
+
 ### 📄 Licença
 
 Este projeto está licenciado sob a [MIT License](LICENSE).
