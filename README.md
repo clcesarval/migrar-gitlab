@@ -368,4 +368,19 @@ Este projeto está licenciado sob a [MIT License](LICENSE).
 
 ---
 
+
+
+
+
+
+<p align="center">
+  <img src="https://img.shields.io/github/stars/clcesarval/migrar-gitlab?style=social" />
+  <img src="https://img.shields.io/github/forks/clcesarval/migrar-gitlab?style=social" />
+  <img src="https://img.shields.io/github/watchers/clcesarval/migrar-gitlab?style=social" />
+  <img src="https://img.shields.io/github/issues/clcesarval/migrar-gitlab" />
+  <img src="https://img.shields.io/github/license/clcesarval/migrar-gitlab" />
+  <img src="https://hits.sh/github.com/clcesarval/migrar-gitlab.svg?style=flat-square" />
+</p>
+
+
 **Licença:** MIT – sinta-se à vontade para reutilizar e adaptar os scripts para seu contexto! 🚀
