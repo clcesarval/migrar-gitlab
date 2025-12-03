@@ -1,3 +1,9 @@
+
+![Repo views](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https://github.com/clcesarval/migrar-gitlab&title=Views&edge_flat=false)
+![GitHub stars](https://img.shields.io/github/stars/clcesarval/migrar-gitlab?style=social)
+
+
+
 # 🚀 migrar-gitlab
 
 Automação da **migração de repositórios do GitLab Community (self-hosted)** para o **GitLab Enterprise (gitlab.com)**.
