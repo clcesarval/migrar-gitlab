@@ -1,8 +1,4 @@
 
-![Repo views](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https://github.com/clcesarval/migrar-gitlab&title=Views&edge_flat=false)
-![GitHub stars](https://img.shields.io/github/stars/clcesarval/migrar-gitlab?style=social)
-
-
 
 # 🚀 migrar-gitlab
 
@@ -390,3 +386,10 @@ Este projeto está licenciado sob a [MIT License](LICENSE).
 
 
 **Licença:** MIT – sinta-se à vontade para reutilizar e adaptar os scripts para seu contexto! 🚀
+
+
+If this toolkit helps you, please ⭐ the repository.
+It’s a simple way to support the project and helps other people discover it when facing similar GitLab migration challenges.
+
+If you find this project useful, consider leaving a ⭐ on the repo.
+Your feedback and stars help the toolkit reach more engineers who are planning or running GitLab → GitLab Enterprise migrations.
