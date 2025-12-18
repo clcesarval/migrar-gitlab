@@ -1,6 +1,11 @@
-# 🚀 migrar-gitlab  
-⭐ GitLab Stars: ![Stars](https://img.shields.io/gitlab/stars/SEU_GRUPO%2FSEU_REPO?style=social)  
-👀 Repository Views: ![Views](https://komarev.com/ghpvc/?username=SEU_USUARIO&repo=SEU_REPO&label=Views)
+# 🚀 migrar-gitlab
+
+⭐ GitLab Stars  
+![Stars](https://img.shields.io/gitlab/stars/grupo%2Fsubgrupo%2Fmigrar-gitlab?style=social)
+
+🚦 Pipeline Status  
+![Pipeline](https://img.shields.io/gitlab/pipeline-status/grupo%2Fsubgrupo%2Fmigrar-gitlab)
+
 
 Automação para migração de repositórios do **GitLab Community (self-hosted)** para o **GitLab Enterprise (gitlab.com)**.
 
