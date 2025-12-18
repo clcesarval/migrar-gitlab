@@ -1,395 +1,215 @@
-
-
 # 🚀 migrar-gitlab
 
-Automação da **migração de repositórios do GitLab Community (self-hosted)** para o **GitLab Enterprise (gitlab.com)**.
+Automation for migrating repositories from GitLab Community (self-hosted) to GitLab Enterprise (gitlab.com).
 
-Este repositório contém **scripts bash reutilizáveis** para facilitar a clonagem, ajuste e push de múltiplos projetos com segurança, controle e padronização.
-
----
-
-## 🗂️ Visão geral dos scripts
-
-| Script                  | Descrição                                                                 |
-|------------------------|---------------------------------------------------------------------------|
-| `clone-projects.sh`    | 🔄 Clona todos os projetos de um grupo GitLab origem                      |
-| `replace_gitlab-ci.sh` | ✏️ Atualiza caminhos internos do `.gitlab-ci.yml` para o novo repositório |
-| `push_projects.sh`     | ⬆️ Reconfigura remotes, recria branches da origem e faz push final        |
+This repository contains reusable Bash scripts to facilitate cloning, adjustment, pushing, metadata migration, and post-migration governance, preserving history, traceability, and security.
 
 ---
 
-## ⚙️ Pré-requisitos
+## 🗂️ Script Overview
 
-- ✅ Git
-- ✅ jq
-- ✅ curl
-- ✅ Bash (Linux ou WSL)
-- ✅ Tokens de acesso (PAT) com permissões:
-  - `read_api`
-  - `read_repository`
-  - `write_repository`
-
----
-
-## 🔹 1. `clone-projects.sh`
-
-### 📋 O que este script faz?
-
-- Acessa a API do GitLab origem
-- Lista todos os projetos do grupo informado
-- Clona os repositórios na pasta `tmp-migracao/`
-- **Evita sobrescrever projetos já clonados**
-- Remove o remote original
-- Adiciona o remote do GitLab destino
-
-### 🛡️ Segurança adicional
-
-- Valida se a pasta já contém repositório `.git`
-- Pula clonagem caso já tenha sido feito anteriormente
-
-### ⚙️ Personalização
-
-Edite no script:
-- `GRUPO`: nome do grupo de origem
-- Tokens (`SOURCE_GITLAB_TOKEN`, `TARGET_GITLAB_TOKEN`)
-- Hosts e caminhos de origem/destino
-
-### ▶️ Como executar:
-
-```bash
-chmod +x clone-projects.sh
-./clone-projects.sh
-```
+| Script | Description |
+|------|------------|
+| clone-projects.sh | Clones all projects from a source GitLab group |
+| replace_gitlab-ci.sh | Updates internal paths in .gitlab-ci.yml |
+| push_projects.sh | Reconfigures remotes, recreates branches, and pushes |
+| migrate-group-variables.sh | Migrates group variables via API |
+| migrate-issues.sh | Migrates issues and comments between projects |
+| delete-issues.sh | Removes all issues from a project |
+| gitlab-clone-recursive.sh | Recursive cloning preserving hierarchy |
+| protect-projects.sh | Protects and locks old projects post-migration |
 
 ---
 
-## 🔹 2. `replace_gitlab-ci.sh`
+## ⚙️ Prerequisites
 
-### ✏️ O que este script faz?
-
-- Localiza todos os arquivos `.gitlab-ci.yml` em `tmp-migracao/`
-- Substitui caminhos antigos por novos (exemplo: `old-group/subgroup` → `new-root-group/.../legacy/subgroup`)
-- Cria backups `.bak` dos arquivos antes de editar
-
-### 🛡️ Segurança adicional
-
-- Backup automático dos arquivos `.gitlab-ci.yml`
-- Exibe um resumo após as substituições
-
-### ⚙️ Personalização
-
-Edite no script:
-
-```bash
-OLD_PATH="caminho/antigo"
-NEW_PATH="caminho/novo"
-```
-
-### ▶️ Como executar:
-
-```bash
-chmod +x replace_gitlab-ci.sh
-./replace_gitlab-ci.sh
-```
+- Git
+- jq
+- curl
+- Bash (Linux or WSL)
+- GitLab access tokens with permissions:
+  - read_api
+  - read_repository
+  - write_repository
+  - maintainer or admin_group depending on the script
 
 ---
 
-## 🔹 3. `push_projects.sh`
+## 🔹 1. clone-projects.sh
 
-### ⬆️ O que este script faz?
+Clones all projects from a source GitLab group.
 
-- Acessa cada projeto clonado
-- Redefine o remote `origin` para o repositório **de origem**
-- Busca todas as branches da origem
-- Cria localmente cada branch remota da origem
-- Redefine o `origin` para o repositório de **destino**
-- Realiza push de **todas as branches** e **tags**
-- **Verifica se há alterações locais antes de commitar**
-- **Protege arquivos modificados localmente, como o `.gitlab-ci.yml`**
-- Verifica se o projeto está arquivado na origem e replica o arquivamento no destino
+### What it does:
+- Queries the GitLab API
+- Lists all projects in the group
+- Clones repositories locally
+- Prevents overwriting already cloned repositories
+- Removes the original remote
+- Adds the destination GitLab remote
 
-### ⚠️ Prevenção de sobrescrita
-
-> Arquivos alterados localmente (ex: `.gitlab-ci.yml`) **não serão sobrescritos** se já houver commit e nada mudou após o `git fetch`.
-
-### ⚙️ Personalização
-
-Edite no script:
-- `GRUPO`
-- Hosts e tokens de origem/destino
-- Caminhos dos grupos
-
-### ▶️ Como executar:
-
-```bash
-chmod +x push_projects.sh
-./push_projects.sh
-```
+### Notes:
+- Safe to re-run
+- No history loss
+- Ideal for large-scale migrations
 
 ---
 
-## 📁 Estrutura esperada após a execução
+## 🔹 2. replace_gitlab-ci.sh
 
-```
-.
-├── clone-projects.sh
-├── push_projects.sh
-├── replace_gitlab-ci.sh
-├── tmp-migracao/
-│   ├── projeto-1/
-│   ├── projeto-2/
-│   └── ...
-└── README.md
-```
+Updates internal references in .gitlab-ci.yml files.
 
----
+### What it does:
+- Locates all .gitlab-ci.yml files
+- Replaces old paths with new ones
+- Creates .bak backups before changes
 
-## ✅ Resultado final esperado
-
-- ✅ Projetos clonados localmente na pasta `tmp-migracao/`
-- ✅ `.gitlab-ci.yml` atualizado com caminhos corretos
-- ✅ Push completo de branches e tags para o GitLab Enterprise
-- ✅ Arquivamento replicado no destino, se aplicável
-- ✅ Proteção contra sobrescrita de arquivos modificados localmente
+### Configuration:
+OLD_PATH="old/path"
+NEW_PATH="new/path"
 
 ---
 
-## 🧠 Dicas finais
+## 🔹 3. push_projects.sh
 
-- Teste com 1 ou 2 projetos antes de rodar com todos
-- Use tokens com escopos completos (inclusive `write_repository`)
-- Faça backup (snapshot) antes de alterações em massa
-- Estruturar projetos por subgrupos (`subgrupo1`, `subgrupo2`, `subgrupo3`, etc.) ajuda na organização
-- Prefira sempre clonar com `git clone` e evitar `--mirror` para manter controle total
+Performs the full push to the destination GitLab.
 
----
-
-
+### What it does:
+- Recreates all branches
+- Pushes full history
+- Preserves repository integrity
 
 ---
 
-## 🔹 4. `migrar-variaveis.sh`
+## 🔹 4. migrate-group-variables.sh
 
-### 📋 O que este script faz?
+Migration of group variables between GitLab instances.
 
-- Acessa a API do GitLab **self-hosted** (Community)
-- Lista todas as variáveis de ambiente do grupo de origem (com paginação)
-- Cria essas variáveis no grupo correspondente no GitLab **Enterprise** (gitlab.com)
-- Trata variáveis já existentes no destino e registra logs detalhados
-
-### 🛡️ Segurança e rastreabilidade
-
-- Cria logs separados:
-  - `variaveis_existentes.log`: variáveis já presentes no destino
-  - `variaveis_falha.log`: variáveis que falharam ao ser migradas (ex: erro 400)
-  - `migracao_variaveis.log`: resumo final
-  - `variables.json`: dump completo das variáveis lidas da origem
-- Exibe na tela o progresso da migração com ícones visuais
-
-### ⚙️ Personalização
-
-No início do script, edite os seguintes valores:
-
-```bash
-TOKEN_ORIGEM="SEU_TOKEN_ORIGEM"
-TOKEN_DESTINO="SEU_TOKEN_DESTINO"
-GROUP_ID_ORIGEM="ID_DO_GRUPO_ORIGEM"
-GROUP_ID_DESTINO="ID_DO_GRUPO_DESTINO"
-URL_ORIGEM_BASE="https://seu.gitlab.origem/api/v4/groups/$GROUP_ID_ORIGEM/variables"
-URL_DESTINO="https://gitlab.com/api/v4/groups/$GROUP_ID_DESTINO/variables"
-```
-
-> Os tokens devem ter escopos com permissões de leitura e escrita em variáveis de grupo.
-
-### ▶️ Como executar:
-
-```bash
-chmod +x migrar-variaveis.sh
-./migrar-variaveis.sh
-```
+### Features:
+- Group variables migrated from source to destination via API
+- Existing variables detected and not overwritten
+- Logs created for auditing and troubleshooting
+- 100% compatible with GitLab API v4
 
 ---
 
-## 📁 Estrutura esperada após a execução
+## 🔹 5. migrate-issues.sh and delete-issues.sh
 
-```
-.
-├── clone-projects.sh
-├── push_projects.sh
-├── replace_gitlab-ci.sh
-├── migrar-variaveis.sh
-├── tmp-migracao/
-│   ├── projeto-1/
-│   ├── projeto-2/
-│   └── ...
-├── variaveis_existentes.log
-├── variaveis_falha.log
-├── migracao_variaveis.log
-├── variables.json
-└── README.md
-```
+## 🧩 GitLab Issue Migration and Cleanup Scripts
+
+This repository contains two Bash scripts useful for manipulating issues between GitLab projects. They are especially useful in migration scenarios between GitLab instances or for full cleanup of existing issues.
 
 ---
 
-## ✅ Resultado final esperado
+### 📦 migrate-issues.sh – Issue and Comment Migration
 
-- ✅ Variáveis de grupo migradas da origem para o destino via API
-- ✅ Variáveis já existentes identificadas e não sobrescritas
-- ✅ Logs criados para auditoria e troubleshooting
-- ✅ Formato 100% compatível com a API v4 do GitLab
+This script migrates all issues and their comments from a source GitLab project to a destination GitLab project.
 
----
+#### Features:
+- Exports issues with title, description, and creation date
+- Recreates issues in the destination project
+- Preserves original state (open or closed)
+- Migrates comments with author name and timestamp
 
-
-## 🔹 5. `migrate-issues.sh` and  `delete-issues.sh`
-
-
-## 🧩 Scripts de Migração e Limpeza de Issues no GitLab
-
-Este repositório contém dois scripts Bash úteis para manipulação de issues entre projetos GitLab. Eles são especialmente úteis em cenários de **migração entre instâncias do GitLab** (ex: de um GitLab self-hosted para o GitLab.com) ou para **limpeza total** de issues existentes.
-
----
-
-### 📦 `migrar_issues.sh` – Migração de Issues e Comentários
-
-Este script migra todas as issues (e seus comentários) de um projeto GitLab de origem para um projeto GitLab de destino.
-
-#### ✅ Funcionalidades:
-- Exporta issues com título, descrição e data de criação
-- Recria as issues no projeto de destino
-- Preserva o estado original (aberta/fechada)
-- Migra comentários (notas) com nome do autor e data
-
-#### 🛠️ Variáveis que você deve configurar:
-```bash
-DEST_PROJECT_ID="ID_DO_PROJETO_DESTINO"
-TOKEN="SEU_TOKEN_PRIVADO_DESTINO"
-SOURCE_PROJECT_ENCODED="grupo%2Fprojeto"  # Caminho do projeto de origem com %2F no lugar de /
-SOURCE_TOKEN="SEU_TOKEN_PRIVADO_ORIGEM"
-```
+#### Required variables:
+DEST_PROJECT_ID="DESTINATION_PROJECT_ID"
+TOKEN="DESTINATION_TOKEN"
+SOURCE_PROJECT_ENCODED="group%2Fproject"
+SOURCE_TOKEN="SOURCE_TOKEN"
 
 ---
 
-### ❌ `deletar_issues.sh` – Deleção em Massa de Issues
+### ❌ delete-issues.sh – Bulk Issue Deletion
 
-Script simples que deleta **todas as issues de um projeto GitLab**. Ideal para limpar projetos de teste, ambiente de staging ou recomeçar uma importação.
+Script to remove all issues from a GitLab project.
 
-#### ⚠️ Aviso:
+⚠️ Warning:
+This operation is irreversible.
 
-**Use com cuidado!** Este script não tem confirmação e deletará todas as issues no projeto indicado.
-
-#### 🛠️ Variáveis que você deve configurar:
-```bash
-DEST_PROJECT_ID="ID_DO_PROJETO"
-TOKEN="SEU_TOKEN_PRIVADO"
-```
+Variables:
+DEST_PROJECT_ID="PROJECT_ID"
+TOKEN="TOKEN"
 
 ---
 
-### 🧪 Requisitos
-
-- `jq` instalado (`sudo apt install jq` ou equivalente)
+### Requirements for issue scripts:
+- jq installed
 - Bash 4+
-- Tokens do GitLab com permissões de leitura e escrita em issues
-- Projeto de destino previamente criado
+- Tokens with read and write permissions
+- Destination project must already exist
+
+Notes:
+- Scripts use only the GitLab REST API
+- Always test in a non-production environment
+- URLs are placeholders and must be adjusted
 
 ---
 
-### 📌 Observações
+## 🔹 6. gitlab-clone-recursive.sh
 
-- Os scripts usam apenas a API REST do GitLab.
-- É recomendado testar em um projeto temporário antes de aplicar em produção.
-- As URLs dos servidores GitLab foram substituídas por placeholders (`gitlab.DESTINO.com`, `gitlab.ORIGEM.com`) para segurança. Atualize conforme necessário.
+Recursive cloning of all repositories from a GitLab group.
 
----
+### Features:
+- Clones root group and subgroups
+- Preserves local directory hierarchy
+- Uses token-based authentication
+- Skips repositories already cloned
 
-
-## 6. `gitlab-clone-recursive.sh` – Clonagem Recursiva de Repositórios GitLab
-
-Este script clona todos os repositórios de um grupo GitLab (e seus subgrupos), preservando a hierarquia de diretórios localmente. É ideal para backup completo ou migração de um grupo GitLab para outra instância.
-
-### ✅ Funcionalidades:
-- Clona todos os projetos do grupo raiz e de subgrupos recursivamente.
-- Preserva a estrutura original de grupos/subgrupos na pasta local.
-- Usa autenticação via token.
-- Ignora repositórios que já foram clonados previamente.
-
-### 🔧 Variáveis que você deve configurar:
-```bash
-GITLAB_URL="https://gitlab.sua-instancia.com"
-GITLAB_TOKEN="SEU_TOKEN_PRIVADO"
-ROOT_GROUP_ID=000                    # ID do grupo raiz
-ROOT_GROUP_PATH="grupo/raiz"        # Caminho do grupo raiz
-```
-
-### ▶️ Como executar:
-```bash
-bash gitlab-clone-recursive.sh
-```
+### Variables:
+GITLAB_URL="https://gitlab.your-instance.com"
+GITLAB_TOKEN="YOUR_TOKEN"
+ROOT_GROUP_ID=000
+ROOT_GROUP_PATH="group/root"
 
 ---
 
-## 7. `gitlab-push-recursive.sh` – Push Recursivo com Criação Automática de Subgrupos
+## 🔹 7. protect-projects.sh – Old Project Protection (POST-MIGRATION)
 
-Este script percorre todos os repositórios clonados e os envia (`push`) para outro servidor GitLab, criando automaticamente os subgrupos e projetos se ainda não existirem no destino.
+Script responsible for completely locking old or migrated projects, ensuring governance and preventing unintended changes.
 
-### ✅ Funcionalidades:
-- Cria subgrupos ausentes automaticamente via API do GitLab.
-- Cria o projeto correspondente no destino.
-- Executa push de todas as branches e tags.
-- Preserva a hierarquia original dos repositórios.
+### What this script does:
+- Protects all branches (*)
+- Blocks direct pushes
+- Blocks direct merges
+- Allows only Maintainers to remove protection
+- Disables merge requests
+- Processes groups and subgroups recursively
 
-### 🔧 Variáveis que você deve configurar:
-```bash
-TARGET_GITLAB_HOST="gitlab.com"
-TARGET_GITLAB_TOKEN="SEU_TOKEN_PRIVADO"
-TARGET_GROUP_PATH="grupo/raiz/para/onde/vai"
-```
+### Configuration:
+GITLAB_HOST="gitlab.com"
+TOKEN="YOUR_TOKEN"
+GROUP_ID="000"
 
-### ▶️ Como executar:
-```bash
-bash gitlab-push-recursive.sh
-```
-
----
-
-💡 **Dica:** Você pode usar `gitlab-clone-recursive.sh` para obter todos os repositórios de um GitLab self-hosted e, em seguida, `gitlab-push-recursive.sh` para enviá-los para o GitLab.com ou outro destino.
-
-🛠 Ambos os scripts foram criados para facilitar a migração de grandes grupos entre diferentes instâncias do GitLab, com mínima intervenção manual.
-
-
-### 📄 Licença
-
-Este projeto está licenciado sob a [MIT License](LICENSE).
-
-
-
-## 👨‍💻 Autor Claudio
-
-[![GitHub - clcesarval](https://img.shields.io/badge/GitHub-clcesarval-blue?logo=github)](https://github.com/clcesarval)
+### Notes:
+- Ideal for legacy or frozen repositories
+- Ensures read-only state after migration
+- Prevents accidental commits or merges
+- Strongly recommended for compliance and audit scenarios
 
 ---
 
+## 🧠 Recommended Migration Flow
 
+1. gitlab-clone-recursive.sh or clone-projects.sh
+2. replace_gitlab-ci.sh
+3. push_projects.sh
+4. migrate-group-variables.sh
+5. migrate-issues.sh
+6. protect-projects.sh
 
+---
 
+## 📄 Final Notes
 
+- Scripts are safe to re-run where applicable
+- Designed for large-scale migrations
+- Successfully used with thousands of repositories
+- Fully based on the official GitLab REST API
+- Suitable for enterprise governance, audit, and compliance scenarios
 
-<p align="center">
-  <img src="https://img.shields.io/github/stars/clcesarval/migrar-gitlab?style=social" />
-  <img src="https://img.shields.io/github/forks/clcesarval/migrar-gitlab?style=social" />
-  <img src="https://img.shields.io/github/watchers/clcesarval/migrar-gitlab?style=social" />
-  <img src="https://img.shields.io/github/issues/clcesarval/migrar-gitlab" />
-  <img src="https://img.shields.io/github/license/clcesarval/migrar-gitlab" />
-  <img src="https://hits.sh/github.com/clcesarval/migrar-gitlab.svg?style=flat-square" />
-</p>
+---
 
+## 📌 License
 
-**Licença:** MIT – sinta-se à vontade para reutilizar e adaptar os scripts para seu contexto! 🚀
+Internal, educational, or corporate use.  
+Adapt as required by your compliance policies.
 
-
-If this toolkit helps you, please ⭐ the repository.
-It’s a simple way to support the project and helps other people discover it when facing similar GitLab migration challenges.
-
-If you find this project useful, consider leaving a ⭐ on the repo.
-Your feedback and stars help the toolkit reach more engineers who are planning or running GitLab → GitLab Enterprise migrations.
