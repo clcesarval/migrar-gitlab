@@ -389,6 +389,42 @@ TOKEN="SEU_TOKEN_PRIVADO"
 GROUP_ID="ID_NUMERICO_DO_GRUPO_RAIZ"
 
 
+---
+
+## 🔹 9. `count-projects-recursively.sh` – Contagem Recursiva de Projetos por Grupo
+
+Este script realiza a **contagem total de projetos GitLab** a partir de um **grupo raiz**, percorrendo **todos os subgrupos de forma recursiva**.
+
+Ele é especialmente útil para:
+- Planejamento de migração
+- Auditoria de escopo
+- Validação de volume antes de execuções em massa
+- Estimativa de esforço e tempo
+
+---
+
+### 📋 O que este script faz?
+
+- Recebe o **caminho de um grupo raiz** (ex: `vas`)
+- Resolve o **ID do grupo** via API do GitLab
+- Conta todos os projetos do grupo (com paginação)
+- Percorre **todos os subgrupos recursivamente**
+- Exibe:
+  - Quantidade de projetos por grupo
+  - Total geral consolidado ao final
+
+---
+
+### ⚙️ Configuração
+
+Edite no início do script:
+
+```bash
+GITLAB_URL="https://gitlab.com"
+TOKEN="SEU_TOKEN_PRIVADO"
+ROOT_GROUP="GRUPO"
+
+
 
 ---
 
