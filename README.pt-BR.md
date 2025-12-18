@@ -412,23 +412,7 @@ Edite no início do script:
 GITLAB_URL="https://gitlab.com"
 TOKEN="SEU_TOKEN_PRIVADO"
 ROOT_GROUP="GRUPO"
-
-
-
-
-### ⚙️ Configuração
-
-Edite no início do script:
-
-```bash
-GITLAB_HOST="gitlab.com"
-TOKEN="SEU_TOKEN_PRIVADO"
-GROUP_ID="ID_NUMERICO_DO_GRUPO_RAIZ"
-
-
----
-
-
+```
 
 ---
 
@@ -450,10 +434,6 @@ Este projeto está licenciado sob a [MIT License](LICENSE).
 ---
 
 
-
-
-
-
 <p align="center">
   <img src="https://img.shields.io/github/stars/clcesarval/migrar-gitlab?style=social" />
   <img src="https://img.shields.io/github/forks/clcesarval/migrar-gitlab?style=social" />
@@ -470,3 +450,13 @@ Se você achou este projeto útil, considere deixar uma ⭐ e um comentário me 
 [GitHub Discussions](https://github.com/clcesarval/migrar-gitlab/discussions)
 
 Seu feedback e suas estrelas ajudam o toolkit a alcançar mais engenheiros que estão planejando ou executando migrações de GitLab → GitLab Enterprise.
+
+
+
+
+
+
+
+
+
+
