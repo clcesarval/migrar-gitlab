@@ -1,4 +1,4 @@
-# 🚀 migrar-gitlab
+# 🚀 migrate-gitlab
 
 Automation for migrating repositories from GitLab Community (self-hosted) to GitLab Enterprise (gitlab.com).
 
