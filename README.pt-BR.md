@@ -13,22 +13,22 @@ Este repositório contém **scripts Bash reutilizáveis** para facilitar clonage
 | Script | Descrição |
 |------|------------|
 | clone-projects.sh | Clona todos os projetos de um grupo GitLab de origem |
+| gitlab-clone-recursive.sh | Clonagem recursiva preservando hierarquia |
 | replace_gitlab-ci.sh | Atualiza caminhos internos no .gitlab-ci.yml |
 | push_projects.sh | Reconfigura remotes, recria branches e realiza push |
 | migrate-group-variables.sh | Migra variáveis de grupo via API |
 | migrate-issues.sh | Migra issues e comentários entre projetos |
 | delete-issues.sh | Remove todas as issues de um projeto |
-| gitlab-clone-recursive.sh | Clonagem recursiva preservando hierarquia |
 | protect-projects.sh | Protege e bloqueia projetos antigos pós-migração |
 
 ---
 
 ## ⚙️ Pré-requisitos
 
-- Git
-- jq
-- curl
-- Bash (Linux ou WSL)
+- Git  
+- jq  
+- curl  
+- Bash (Linux ou WSL)  
 - Tokens de acesso do GitLab com permissões:
   - read_api
   - read_repository
@@ -56,7 +56,25 @@ Clona todos os projetos de um grupo GitLab de origem.
 
 ---
 
-## 🔹 2. replace_gitlab-ci.sh
+## 🔹 2. gitlab-clone-recursive.sh
+
+Clonagem recursiva de todos os repositórios de um grupo GitLab.
+
+### Funcionalidades:
+- Clona grupo raiz e subgrupos
+- Preserva a hierarquia de diretórios local
+- Usa autenticação baseada em token
+- Ignora repositórios já clonados
+
+### Variáveis:
+GITLAB_URL="https://gitlab.sua-instancia.com"  
+GITLAB_TOKEN="SEU_TOKEN"  
+ROOT_GROUP_ID=000  
+ROOT_GROUP_PATH="group/root"
+
+---
+
+## 🔹 3. replace_gitlab-ci.sh
 
 Atualiza referências internas nos arquivos .gitlab-ci.yml.
 
@@ -71,7 +89,7 @@ NEW_PATH="new/path"
 
 ---
 
-## 🔹 3. push_projects.sh
+## 🔹 4. push_projects.sh
 
 Executa o push completo para o GitLab de destino.
 
@@ -82,7 +100,7 @@ Executa o push completo para o GitLab de destino.
 
 ---
 
-## 🔹 4. migrate-group-variables.sh
+## 🔹 5. migrate-group-variables.sh
 
 Migração de variáveis de grupo entre instâncias GitLab.
 
@@ -94,7 +112,7 @@ Migração de variáveis de grupo entre instâncias GitLab.
 
 ---
 
-## 🔹 5. migrate-issues.sh e delete-issues.sh
+## 🔹 6. migrate-issues.sh e delete-issues.sh
 
 ## 🧩 Scripts de Migração e Limpeza de Issues no GitLab
 
@@ -147,24 +165,6 @@ Observações:
 
 ---
 
-## 🔹 6. gitlab-clone-recursive.sh
-
-Clonagem recursiva de todos os repositórios de um grupo GitLab.
-
-### Funcionalidades:
-- Clona grupo raiz e subgrupos
-- Preserva a hierarquia de diretórios local
-- Usa autenticação baseada em token
-- Ignora repositórios já clonados
-
-### Variáveis:
-GITLAB_URL="https://gitlab.sua-instancia.com"  
-GITLAB_TOKEN="SEU_TOKEN"  
-ROOT_GROUP_ID=000  
-ROOT_GROUP_PATH="group/root"
-
----
-
 ## 🔹 7. protect-projects.sh – Proteção de Projetos Antigos (PÓS-MIGRAÇÃO)
 
 Script responsável por bloquear completamente projetos antigos ou migrados, garantindo governança e prevenindo alterações não intencionais.
@@ -192,12 +192,13 @@ GROUP_ID="888"
 
 ## 🧠 Fluxo recomendado de migração
 
-1. gitlab-clone-recursive.sh ou clone-projects.sh  
-2. replace_gitlab-ci.sh  
-3. push_projects.sh  
-4. migrate-group-variables.sh  
-5. migrate-issues.sh  
-6. protect-projects.sh  
+1. clone-projects.sh  
+2. gitlab-clone-recursive.sh  
+3. replace_gitlab-ci.sh  
+4. push_projects.sh  
+5. migrate-group-variables.sh  
+6. migrate-issues.sh  
+7. protect-projects.sh  
 
 ---
 
