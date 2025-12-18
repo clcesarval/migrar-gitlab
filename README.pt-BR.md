@@ -379,17 +379,6 @@ Ele é especialmente útil em cenários onde:
 
 ---
 
-### ⚙️ Configuração
-
-Edite no início do script:
-
-```bash
-GITLAB_HOST="gitlab.com"
-TOKEN="SEU_TOKEN_PRIVADO"
-GROUP_ID="ID_NUMERICO_DO_GRUPO_RAIZ"
-
-
----
 
 ## 🔹 9. `count-projects-recursively.sh` – Contagem Recursiva de Projetos por Grupo
 
@@ -423,6 +412,21 @@ Edite no início do script:
 GITLAB_URL="https://gitlab.com"
 TOKEN="SEU_TOKEN_PRIVADO"
 ROOT_GROUP="GRUPO"
+
+
+
+
+### ⚙️ Configuração
+
+Edite no início do script:
+
+```bash
+GITLAB_HOST="gitlab.com"
+TOKEN="SEU_TOKEN_PRIVADO"
+GROUP_ID="ID_NUMERICO_DO_GRUPO_RAIZ"
+
+
+---
 
 
 
