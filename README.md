@@ -381,6 +381,43 @@ GROUP_ID="ID_OF_THE_ROOT_GROUP"
 
 ---
 
+## 🔹 9. `count-projects-recursively.sh` – Recursive Project Count by Group
+
+This script performs a **recursive count of GitLab projects** starting from a **root group**, traversing **all nested subgroups**.
+
+It is especially useful for:
+- Migration planning
+- Scope auditing
+- Pre-migration validation
+- Effort and timeline estimation for large-scale operations
+
+---
+
+### 📋 What does this script do?
+
+- Accepts a **root group path**
+- Resolves the **group ID** using the GitLab API
+- Counts all projects within the group (with pagination)
+- Recursively traverses all subgroups
+- Displays:
+  - Project count per group
+  - A consolidated total at the end
+
+---
+
+### ⚙️ Configuration
+
+Edit the following variables at the beginning of the script:
+
+```bash
+GITLAB_URL="https://gitlab.your-instance.com"
+TOKEN="YOUR_PRIVATE_TOKEN"
+ROOT_GROUP="root/group/path"
+
+
+
+---
+
 💡 **Tip:** You can use `gitlab-clone-recursive.sh` to fetch all repositories from a self-hosted GitLab and then `gitlab-push-recursive.sh` to migrate them to GitLab.com or another target.
 
 🛠 Both scripts are designed to ease the migration of large groups between GitLab instances with minimal manual intervention.
