@@ -424,11 +424,8 @@ Este projeto está licenciado sob a [MIT License](LICENSE).
 </p>
 
 
-**Licença:** MIT – sinta-se à vontade para reutilizar e adaptar os scripts para seu contexto! 🚀
+**Licença:** MIT – sinta-se à vontade para reutilizar e adaptar os scripts para o seu contexto! 🚀
+ 
 
-
-If this toolkit helps you, please ⭐ the repository.
-It’s a simple way to support the project and helps other people discover it when facing similar GitLab migration challenges.
-
-If you find this project useful, consider leaving a ⭐ on the repo.
-Your feedback and stars help the toolkit reach more engineers who are planning or running GitLab → GitLab Enterprise migrations.
+Se você achou este projeto útil, considere deixar uma ⭐ e um comentário me dizendo se a sua experiência deu certo em https://github.com/clcesarval/migrar-gitlab/discussions 
+Seu feedback e suas estrelas ajudam o toolkit a alcançar mais engenheiros que estão planejando ou executando migrações de GitLab → GitLab Enterprise.
