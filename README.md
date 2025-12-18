@@ -208,8 +208,39 @@ GROUP_ID="888"
 
 ---
 
-## 📌 License
+### 📄 Licença
 
-Internal, educational, or corporate use.  
-Adapt as required by your compliance policies.
+Este projeto está licenciado sob a [MIT License](LICENSE).
+
+
+
+## 👨‍💻 Autor Claudio
+
+[![GitHub - clcesarval](https://img.shields.io/badge/GitHub-clcesarval-blue?logo=github)](https://github.com/clcesarval)
+
+---
+
+
+
+
+
+
+<p align="center">
+  <img src="https://img.shields.io/github/stars/clcesarval/migrar-gitlab?style=social" />
+  <img src="https://img.shields.io/github/forks/clcesarval/migrar-gitlab?style=social" />
+  <img src="https://img.shields.io/github/watchers/clcesarval/migrar-gitlab?style=social" />
+  <img src="https://img.shields.io/github/issues/clcesarval/migrar-gitlab" />
+  <img src="https://img.shields.io/github/license/clcesarval/migrar-gitlab" />
+  <img src="https://hits.sh/github.com/clcesarval/migrar-gitlab.svg?style=flat-square" />
+</p>
+
+
+**Licença:** MIT – sinta-se à vontade para reutilizar e adaptar os scripts para seu contexto! 🚀
+
+
+If this toolkit helps you, please ⭐ the repository.
+It’s a simple way to support the project and helps other people discover it when facing similar GitLab migration challenges.
+
+If you find this project useful, consider leaving a ⭐ on the repo.
+Your feedback and stars help the toolkit reach more engineers who are planning or running GitLab → GitLab Enterprise migrations.
 
