@@ -380,7 +380,7 @@ Ele é especialmente útil em cenários onde:
 ---
 
 
-## 🔹 9. `count-projects-recursively.sh` – Contagem Recursiva de Projetos por Grupo
+## 🔹 9. `count-project.sh` – Contagem Recursiva de Projetos por Grupo
 
 Este script realiza a **contagem total de projetos GitLab** a partir de um **grupo raiz**, percorrendo **todos os subgrupos de forma recursiva**.
 
@@ -450,7 +450,6 @@ Se você achou este projeto útil, considere deixar uma ⭐ e um comentário me 
 [GitHub Discussions](https://github.com/clcesarval/migrar-gitlab/discussions)
 
 Seu feedback e suas estrelas ajudam o toolkit a alcançar mais engenheiros que estão planejando ou executando migrações de GitLab → GitLab Enterprise.
-
 
 
 

@@ -381,7 +381,7 @@ GROUP_ID="ID_OF_THE_ROOT_GROUP"
 
 ---
 
-## 🔹 9. `count-projects-recursively.sh` – Recursive Project Count by Group
+## 🔹 9. `count-project.sh` – Recursive Project Count by Group
 
 This script performs a **recursive count of GitLab projects** starting from a **root group**, traversing **all nested subgroups**.
 
