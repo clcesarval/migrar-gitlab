@@ -416,6 +416,45 @@ ROOT_GROUP="GRUPO"
 
 ---
 
+## 🔹 10. `verify-migration.sh` – Validação Pós-Migração (somente leitura)
+
+Este script confere, projeto a projeto, se a migração está completa. Ele apenas lê dados das APIs do GitLab de origem e de destino: **nada é criado, alterado ou apagado**.
+
+### 📋 O que este script faz?
+
+- Lista todos os projetos do grupo de origem, incluindo todos os subgrupos (com paginação)
+- Confere se existe, no grupo de destino, um projeto com o mesmo caminho relativo
+- Compara, em cada projeto:
+  - a quantidade de branches
+  - a quantidade de tags
+  - o commit para o qual cada tag aponta
+- Informa se a branch padrão aponta para o mesmo commit. Um commit diferente é esperado quando o `.gitlab-ci.yml` foi reescrito pelo `replace_gitlab-ci.sh`, por isso isso é informado, mas não conta como divergência
+- Gera o `verification_report.csv` (uma linha por projeto: `OK`, `MISMATCH`, `MISSING` ou `ERROR`) e mostra um resumo
+- Termina com código `0` somente quando todos os projetos estão `OK`
+
+### ⚙️ Configuração
+
+Edite no início do script:
+
+```bash
+SOURCE_URL="https://gitlab.SOURCE.com"
+SOURCE_TOKEN="YOUR_SOURCE_TOKEN"
+SOURCE_GROUP="old-group"                        # caminho completo do grupo raiz de origem
+TARGET_URL="https://gitlab.TARGET.com"
+TARGET_TOKEN="YOUR_TARGET_TOKEN"
+TARGET_GROUP="new-root-group/subgroup/legacy"   # onde a árvore de origem foi recriada
+```
+
+> Os tokens precisam apenas do escopo `read_api`. Requer `bash`, `curl` e `jq`.
+
+### ▶️ Como executar:
+
+```bash
+bash verify-migration.sh
+```
+
+---
+
 💡 **Dica:** Você pode usar `gitlab-clone-recursive.sh` para obter todos os repositórios de um GitLab self-hosted e, em seguida, `gitlab-push-recursive.sh` para enviá-los para o GitLab.com ou outro destino.
 
 🛠 Ambos os scripts foram criados para facilitar a migração de grandes grupos entre diferentes instâncias do GitLab, com mínima intervenção manual.

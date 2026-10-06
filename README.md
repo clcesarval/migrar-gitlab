@@ -413,8 +413,46 @@ Edit the following variables at the beginning of the script:
 GITLAB_URL="https://gitlab.your-instance.com"
 TOKEN="YOUR_PRIVATE_TOKEN"
 ROOT_GROUP="root/group/path"
+```
 
+---
 
+## 🔹 10. `verify-migration.sh` – Post-Migration Validation (read-only)
+
+This script checks, project by project, that the migration is complete. It only reads data from the source and target GitLab APIs: **nothing is created, changed or deleted**.
+
+### 📋 What does this script do?
+
+- Lists every project under the source group, including all subgroups (with pagination)
+- Checks that a project with the same relative path exists under the target group
+- Compares, for each project:
+  - number of branches
+  - number of tags
+  - the commit each tag points to
+- Reports whether the default branch points to the same commit. A different commit is expected when `.gitlab-ci.yml` was rewritten by `replace_gitlab-ci.sh`, so it is reported but not counted as a mismatch
+- Writes `verification_report.csv` (one line per project: `OK`, `MISMATCH`, `MISSING` or `ERROR`) and prints a summary
+- Exits with code `0` only when every project is `OK`
+
+### ⚙️ Configuration
+
+Edit the following variables at the beginning of the script:
+
+```bash
+SOURCE_URL="https://gitlab.SOURCE.com"
+SOURCE_TOKEN="YOUR_SOURCE_TOKEN"
+SOURCE_GROUP="old-group"                        # full path of the source root group
+TARGET_URL="https://gitlab.TARGET.com"
+TARGET_TOKEN="YOUR_TARGET_TOKEN"
+TARGET_GROUP="new-root-group/subgroup/legacy"   # where the source tree was recreated
+```
+
+> Tokens need only the `read_api` scope. Requires `bash`, `curl` and `jq`.
+
+### ▶️ How to run:
+
+```bash
+bash verify-migration.sh
+```
 
 ---
 
